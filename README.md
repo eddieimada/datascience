@@ -40,62 +40,65 @@ Details
 
 - First the script navigate to the test folder.
 
-`setwd("./test")`
+`setwd("./test")`<br/>
+
 
 - Then it load all necessary files in this folder: "X_test.txt", "subject_test.txt" and "y_test.txt" which contains the test data set, the subjects IDs and the Activity type (class) respectively.
 
-`test <- read.table("X_test.txt", sep = "", header = FALSE)`
-`subjTest <- read.table("subject_test.txt")`
-`tested_class <- read.table("y_test.txt")`
+`test <- read.table("X_test.txt", sep = "", header = FALSE)`<br/>
+`subjTest <- read.table("subject_test.txt")`<br/>
+`tested_class <- read.table("y_test.txt")`<br/>
 
 - Return to original folder and loads the "features.txt" file which contain the features names on it's second column (V2) and assign it to the variable features which in turn it's assigned to the test data frame.
 
-`setwd("..")`
-`features <- read.table("features.txt", sep="", header = FALSE)`
-`features <- features$V2`
-`features <- as.character(features)`
-`names(test) <- features`
+`setwd("..")`<br/>
+`features <- read.table("features.txt", sep="", header = FALSE)`<br/>
+`features <- features$V2`<br/>
+`features <- as.character(features)`<br/>
+`names(test) <- features`<br/>
 
 - Then it navigates to the train folder and loads all necessary files similar to the previous steps.
-`setwd("./train")`
-`train <- read.table("X_train.txt", sep = "", header = FALSE)`
-`subjTrain <- read.table("subject_train.txt")`
-`trained_class <- read.table("y_train.txt")`
-`names(train) <- features`
+
+`setwd("./train")`<br/>
+`train <- read.table("X_train.txt", sep = "", header = FALSE)`<br/>
+`subjTrain <- read.table("subject_train.txt")`<br/>
+`trained_class <- read.table("y_train.txt")`<br/>
+`names(train) <- features`<br/>
 
 - The train and test data frames are merged into the "merged" dataframe.
 
-`merged <- rbind(test,train)`
+`merged <- rbind(test,train)`<br/>
 
 - Then only the features containing the substrings "std" and "mean" are collected.
 
-`merged <- merged[,grepl("std|mean",x = names(merged))]`
+`merged <- merged[,grepl("std|mean",x = names(merged))]`<br/>
 
 - The classes from test and trained are merged and binded to the merged data set. Also the subjetcs are binded to the merged data set as well, generating the fulldata dataset.
-`all_classes <- rbind(tested_class, trained_class)`
-`all_classes <- rename(all_classes, ActivityType = V1)`
-`fulldata <- cbind(merged, all_classes)`
-`subjects <- rbind(subjTest, subjTrain)`
-`subjects <- rename(subjects, SubjectsID = V1)`
-`fulldata<- cbind(fulldata, subjects)`
+
+`all_classes <- rbind(tested_class, trained_class)`<br/>
+`all_classes <- rename(all_classes, ActivityType = V1)`<br/>
+`fulldata <- cbind(merged, all_classes)`<br/>
+`subjects <- rbind(subjTest, subjTrain)`<br/>
+`subjects <- rename(subjects, SubjectsID = V1)`<br/>
+`fulldata<- cbind(fulldata, subjects)`<br/>
 
 
 - The data is then grouped by it's Activity Type a Subjects IDs, the mean value for each feature is calculated.
 
-`grouped <- group_by(fulldata, ActivityType, SubjectsID)`
-`final <- summarise_each(grouped, funs(mean))`
+`grouped <- group_by(fulldata, ActivityType, SubjectsID)`<br/>
+`final <- summarise_each(grouped, funs(mean))`<br/>
 
 - Finally the values of Activity Type are changed to a more comprensive descriptor, generating the final data frame.
 
-`final$ActivityType[final$ActivityType == 1 ] <- "Walking"`
-`final$ActivityType[final$ActivityType == 2 ] <- "Walking_upstairs"`
-`final$ActivityType[final$ActivityType == 3 ] <- "Walking_downstairs"`
-`final$ActivityType[final$ActivityType == 4 ] <- "Sitting"`
-`final$ActivityType[final$ActivityType == 5 ] <- "Standing"`
-`final$ActivityType[final$ActivityType == 6 ] <- "Laying"`
+`final$ActivityType[final$ActivityType == 1 ] <- "Walking"`<br/>
+`final$ActivityType[final$ActivityType == 2 ] <- "Walking_upstairs"`<br/>
+`final$ActivityType[final$ActivityType == 3 ] <- "Walking_downstairs"`<br/>
+`final$ActivityType[final$ActivityType == 4 ] <- "Sitting"`<br/>
+`final$ActivityType[final$ActivityType == 5 ] <- "Standing"`<br/>
+`final$ActivityType[final$ActivityType == 6 ] <- "Laying"`<br/>
 
 - Last, it returns to the original folder and writes the data frame to a file named "course_project.txt" contained in this repository.
 
-`setwd("..")`
-`write.table(final, file = "course_project.txt", row.names = FALSE)`
+`setwd("..")`<br/>
+`write.table(final, file = "course_project.txt", row.names = FALSE)`<br/>
 
